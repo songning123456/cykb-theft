@@ -336,7 +336,7 @@ public class TheftProcessor {
     @Async("TheftExecutor")
     public void theftFeiku() {
         String baseUrl = "http://www.feiku.org/shuku/quanbu_default_0_0_0_0_0_0_";
-        for (int i = 1, iLen = 70; i < iLen; i++) {
+        for (int i = 0, iLen = 69; i < iLen; i++) {
             try {
                 String sourceUrl = baseUrl + (i + 1) + ".html";
                 Document pageNovelsDoc = HttpUtil.getHtmlFromUrl(sourceUrl, true);
