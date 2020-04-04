@@ -9,12 +9,14 @@ import com.sn.theft.util.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.print.Doc;
 import java.util.Date;
 import java.util.List;
 
@@ -98,6 +100,97 @@ class TheftApplicationTests {
         } catch (Exception e) {
             log.error("最外层Exception: {}", e.getMessage());
         }
+    }
+
+    @Test
+    public void theftFeiku() {
+        String baseUrl = "http://www.feiku.org/shuku/quanbu_default_0_0_0_0_0_0_";
+        for (int i = 0, iLen = 70; i < 5; i++) {
+            try {
+                String sourceUrl = baseUrl + (i + 1) + ".html";
+                Document pageNovelsDoc = HttpUtil.getHtmlFromUrl(sourceUrl, true);
+                Elements liElements = pageNovelsDoc.getElementsByClass("books-list").get(0).getElementsByTag("li");
+                for (int j = 0, jLen = liElements.size(); j < 5; j++) {
+                    try {
+                        Element aElement = liElements.get(j).getElementsByTag("a").get(0);
+                        String novelsUrl = aElement.attr("href");
+                        List<Novels> jNovels = novelsRepository.findBySourceUrl(novelsUrl);
+                        if (jNovels != null && jNovels.size() > 0) {
+                            continue;
+                        }
+                        Document novelsDoc = HttpUtil.getHtmlFromUrl(novelsUrl, true);
+                        String coverUrl = novelsDoc.getElementsByClass("bookcover-l").get(0).getElementsByTag("img").get(0).attr("src");
+                        Element bookInfo = novelsDoc.getElementsByClass("book-intro").get(0);
+                        String paramTime = bookInfo.getElementsByTag("b").get(1).html();
+                        int left = paramTime.indexOf("(");
+                        int right = paramTime.indexOf(")");
+                        String strUpdateTime = paramTime.substring(left + 1, right) + " 00:00:00";
+                        Date updateTime = DateUtil.strToDate(strUpdateTime, "yyyy-MM-dd HH:mm:ss");
+                        String bookHtml = bookInfo.html();
+                        int firstBr = bookHtml.indexOf("<br>");
+                        String introduction = bookHtml.substring(0, firstBr);
+                        introduction = introduction.replaceAll("　　&nbsp;&nbsp;&nbsp;&nbsp;","");
+                        int firstB = bookHtml.indexOf("</b>");
+                        int lastBr = bookHtml.lastIndexOf("<br>");
+                        String[] info = bookHtml.substring(firstB + 5, lastBr - 2).split(" ");
+                        String title = info[0];
+                        String author = info[1];
+                        String category = info[2];
+                        String latestChapter = bookInfo.getElementsByTag("a").html();
+                        Thread.sleep(1);
+                        Long createTime = DateUtil.dateToLong(new Date());
+                        Novels novels = Novels.builder().title(title).author(author).sourceUrl(novelsUrl).sourceName("飞库小说").category(category).createTime(createTime).coverUrl(coverUrl).introduction(introduction).latestChapter(latestChapter).updateTime(updateTime).build();
+                        novels = novelsRepository.save(novels);
+                        String listUrl = novelsDoc.getElementsByClass("catalogbtn").get(0).attr("href");
+                        Document listDoc = HttpUtil.getHtmlFromUrl(listUrl, true);
+                        Elements chapterList = listDoc.getElementsByClass("chapter-list").get(0).getElementsByTag("a");
+                        for (int k = 0, kLen = chapterList.size(); k < 5; k++) {
+                            try {
+                                String contentUrl = "http://www.feiku.org" + chapterList.get(k).attr("href");
+                                String chapter = chapterList.get(k).html();
+                                List<Chapters> kChapters = chaptersRepository.findByChapterAndNovelsId(chapter, novels.getId());
+                                if (kChapters != null && kChapters.size() > 0) {
+                                    continue;
+                                }
+                                Document contentDoc = HttpUtil.getHtmlFromUrl(contentUrl, true);
+                                String content = contentDoc.getElementsByClass("article-con").get(0).html();
+                                Date chapterUpTime = DateUtil.intervalTime(strUpdateTime, kLen - k - 1);
+                                Chapters chapters = Chapters.builder().chapter(chapter).content(content).novelsId(novels.getId()).updateTime(chapterUpTime).build();
+                                chaptersRepository.save(chapters);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Test
+    public void testBr() {
+        String url = "http://www.feiku.org/book/2056.html";
+        Document document = HttpUtil.getHtmlFromUrl(url, true);
+        Element bookInfo = document.getElementsByClass("book-intro").get(0);
+        String paramTime = bookInfo.getElementsByTag("b").get(1).html();
+        int left = paramTime.indexOf("(");
+        int right = paramTime.indexOf(")");
+        String strUpdateTime = paramTime.substring(left + 1, right);
+        String bookHtml = bookInfo.html();
+        int firstBr = bookHtml.indexOf("<br>");
+        String introduction = bookHtml.substring(0, firstBr);
+        int firstB = bookHtml.indexOf("</b>");
+        int lastBr = bookHtml.lastIndexOf("<br>");
+        String[] info = bookHtml.substring(firstB + 5, lastBr - 2).split(" ");
+        String title = info[0];
+        String author = info[1];
+        String category = info[2];
+        String chapter = bookInfo.getElementsByTag("a").html();
+        System.out.println("");
     }
 
 }

@@ -49,6 +49,9 @@ public class NovelsServiceImpl implements NovelsService {
                     break;
                 case "趣书吧":
                     theftProcessor.theftQushuba();
+                case "飞库小说":
+                    theftProcessor.theftFeiku();
+                    break;
                 default:
                     theftProcessor.testTheft();
                     break;
