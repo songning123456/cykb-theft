@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.print.Doc;
 import java.util.Date;
 import java.util.List;
 
@@ -129,7 +128,7 @@ class TheftApplicationTests {
                         String bookHtml = bookInfo.html();
                         int firstBr = bookHtml.indexOf("<br>");
                         String introduction = bookHtml.substring(0, firstBr);
-                        introduction = introduction.replaceAll("　　&nbsp;&nbsp;&nbsp;&nbsp;","");
+                        introduction = introduction.replaceAll("　　&nbsp;&nbsp;&nbsp;&nbsp;", "");
                         int firstB = bookHtml.indexOf("</b>");
                         int lastBr = bookHtml.lastIndexOf("<br>");
                         String[] info = bookHtml.substring(firstB + 5, lastBr - 2).split(" ");
