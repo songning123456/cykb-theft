@@ -22,9 +22,9 @@ public class ThreadConfig {
     @Bean(name = "CategoryExecutor")
     public Executor categoryExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(200);
-        executor.setMaxPoolSize(400);
-        executor.setQueueCapacity(400);
+        executor.setCorePoolSize(17);
+        executor.setMaxPoolSize(100);
+        executor.setQueueCapacity(200);
         executor.setKeepAliveSeconds(3600);
         executor.setThreadNamePrefix("CategoryAsync_");
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
