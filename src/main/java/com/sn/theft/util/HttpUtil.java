@@ -208,7 +208,7 @@ public class HttpUtil {
             webClient.getOptions().setCssEnabled(false);
             webClient.getOptions().setThrowExceptionOnScriptError(false);
             webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-            webClient.getOptions().setTimeout(10000 * 10);
+            webClient.getOptions().setTimeout(10000);
             HtmlPage rootPage;
             try {
                 rootPage = webClient.getPage(url);
