@@ -63,7 +63,7 @@ public class TheftProcessor {
                             Date updateTime = DateUtil.strToDate(strUpdateTime, "yyyy-MM-dd HH:mm:ss");
                             Novels novels = Novels.builder().title(title).author(author).sourceUrl(bookUrl).sourceName("笔趣阁").category(category).createTime(createTime).coverUrl(coverUrl).introduction(introduction).latestChapter(latestChapter).updateTime(updateTime).build();
                             novels = novelsRepository.save(novels);
-                            log.info("当前小说sourceUrl: {}", novels.getSourceUrl());
+                            log.info("NOVELS当前小说sourceUrl: {}", novels.getSourceUrl());
                             String novelsId = novels.getId();
                             Element dlElement = childDoc.getElementById("list").getElementsByTag("dl").get(0);
                             for (int k = 0, kLen = dlElement.getElementsByTag("dd").size(); k < kLen; k++) {
@@ -80,7 +80,7 @@ public class TheftProcessor {
                                     String content = contentDoc.getElementById("content").html();
                                     Chapters chapters = Chapters.builder().chapter(chapter).content(content).novelsId(novelsId).updateTime(chapterUpTime).build();
                                     chaptersRepository.save(chapters);
-                                    log.info("当前小说sourceUrl: {}; 章节chapter: {}", novels.getSourceUrl(), chapters.getChapter());
+                                    log.info("CHAPTERS当前小说sourceUrl: {}; 章节chapter: {}", novels.getSourceUrl(), chapters.getChapter());
                                 } catch (Exception e) {
                                     log.error("笔趣阁 one: {}", e.getMessage());
                                 }
@@ -128,7 +128,7 @@ public class TheftProcessor {
                         Date updateTime = DateUtil.strToDate(strUpdateTime, "yyyy-MM-dd HH:mm:ss");
                         Novels novels = Novels.builder().title(title).author(author).sourceUrl(contentUrl).sourceName("147小说").category(category).createTime(createTime).coverUrl(coverUrl).introduction(introduction).latestChapter(latestChapter).updateTime(updateTime).build();
                         novels = novelsRepository.save(novels);
-                        log.info("当前小说sourceUrl: {}", novels.getSourceUrl());
+                        log.info("NOVELS当前小说sourceUrl: {}", novels.getSourceUrl());
                         String novelsId = novels.getId();
                         Elements ddElements = contentDoc.getElementById("list").getElementsByTag("dd");
                         for (int k = 0, kLen = ddElements.size(); k < kLen; k++) {
@@ -145,7 +145,7 @@ public class TheftProcessor {
                                 String content = chapterDoc.getElementById("content").html();
                                 Chapters chapters = Chapters.builder().chapter(chapter).content(content).novelsId(novelsId).updateTime(chapterUpTime).build();
                                 chaptersRepository.save(chapters);
-                                log.info("当前小说sourceUrl: {}; 章节chapter: {}", novels.getSourceUrl(), chapters.getChapter());
+                                log.info("CHAPTERS当前小说sourceUrl: {}; 章节chapter: {}", novels.getSourceUrl(), chapters.getChapter());
                             } catch (Exception e) {
                                 log.error("147小说 one fail: {}", e.getMessage());
                             }
@@ -205,7 +205,7 @@ public class TheftProcessor {
                 Date updateTime = DateUtil.strToDate(strUpdateTime, "yyyy-MM-dd HH:mm:ss");
                 Novels novels = Novels.builder().title(title).author(author).sourceUrl(dictionaryUrl).sourceName("天天书吧").category(category).createTime(createTime).coverUrl(coverUrl).introduction(introduction).latestChapter(latestChapter).updateTime(updateTime).build();
                 novels = novelsRepository.save(novels);
-                log.info("当前小说sourceUrl: {}", novels.getSourceUrl());
+                log.info("NOVELS当前小说sourceUrl: {}", novels.getSourceUrl());
                 String novelsId = novels.getId();
                 Elements ddElements = dictionaryDoc.getElementById("list").getElementsByTag("dd");
                 for (int k = 0, kLen = ddElements.size(); k < kLen; k++) {
@@ -225,7 +225,7 @@ public class TheftProcessor {
                         content = content.substring(headIndex, tailIndex);
                         Chapters chapters = Chapters.builder().chapter(chapter).content(content).novelsId(novelsId).updateTime(chapterUpTime).build();
                         chaptersRepository.save(chapters);
-                        log.info("当前小说sourceUrl: {}; 章节chapter: {}", novels.getSourceUrl(), chapters.getChapter());
+                        log.info("CHAPTERS当前小说sourceUrl: {}; 章节chapter: {}", novels.getSourceUrl(), chapters.getChapter());
                     } catch (Exception e) {
                         log.error("天天书吧 one fail: {}", e.getMessage());
                     }
@@ -269,7 +269,7 @@ public class TheftProcessor {
                         Date updateTime = DateUtil.strToDate(strUpdateTime, "yyyy-MM-dd HH:mm:ss");
                         Novels novels = Novels.builder().title(title).author(author).sourceUrl(novelsUrl).sourceName("趣书吧").category(category).createTime(createTime).coverUrl(coverUrl).introduction(introduction).latestChapter(latestChapter).updateTime(updateTime).build();
                         novels = novelsRepository.save(novels);
-                        log.info("当前小说sourceUrl: {}", novels.getSourceUrl());
+                        log.info("NOVELS当前小说sourceUrl: {}", novels.getSourceUrl());
                         String novelsId = novels.getId();
                         Element dlElement = novelsDoc.getElementById("list").getElementsByTag("dl").get(0);
                         for (int k = 0, kLen = dlElement.getElementsByTag("dd").size(); k < kLen; k++) {
@@ -286,7 +286,7 @@ public class TheftProcessor {
                                 String content = contentDoc.getElementById("content").html();
                                 Chapters chapters = Chapters.builder().chapter(chapter).content(content).novelsId(novelsId).updateTime(chapterUpTime).build();
                                 chaptersRepository.save(chapters);
-                                log.info("当前小说sourceUrl: {}; 章节chapter: {}", novels.getSourceUrl(), chapters.getChapter());
+                                log.info("CHAPTERS当前小说sourceUrl: {}; 章节chapter: {}", novels.getSourceUrl(), chapters.getChapter());
                             } catch (Exception e) {
                                 log.error("趣书吧 one fail: {}", e.getMessage());
                             }
@@ -340,7 +340,7 @@ public class TheftProcessor {
                         Long createTime = DateUtil.dateToLong(new Date());
                         Novels novels = Novels.builder().title(title).author(author).sourceUrl(novelsUrl).sourceName("飞库小说").category(category).createTime(createTime).coverUrl(coverUrl).introduction(introduction).latestChapter(latestChapter).updateTime(updateTime).build();
                         novels = novelsRepository.save(novels);
-                        log.info("当前小说sourceUrl: {}", novels.getSourceUrl());
+                        log.info("NOVELS当前小说sourceUrl: {}", novels.getSourceUrl());
                         String listUrl = novelsDoc.getElementsByClass("catalogbtn").get(0).attr("href");
                         String novelsId = novels.getId();
                         Document listDoc = HttpUtil.getHtmlFromUrl(listUrl, true);
@@ -358,7 +358,7 @@ public class TheftProcessor {
                                 String content = contentDoc.getElementsByClass("article-con").get(0).html();
                                 Chapters chapters = Chapters.builder().chapter(chapter).content(content).novelsId(novelsId).updateTime(chapterUpTime).build();
                                 chaptersRepository.save(chapters);
-                                log.info("当前小说sourceUrl: {}; 章节chapter: {}", novels.getSourceUrl(), chapters.getChapter());
+                                log.info("CHAPTERS当前小说sourceUrl: {}; 章节chapter: {}", novels.getSourceUrl(), chapters.getChapter());
                             } catch (Exception e) {
                                 log.error("飞库小说 one fail: {}", e.getMessage());
                             }
